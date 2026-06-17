@@ -5,3 +5,5 @@ export { default as Experience } from "./Experience";
 export { default as Certificates } from "./Certificates";
 export { default as Contact } from "./Contact";
 export { default as NoFounds } from "./NoFounds";
+export { default as LandingPage } from "./LandingPage";
+export { default as LoadingPage } from "./Loadingpage";

@@ -9,6 +9,7 @@ import {
   Contact,
   Experience,
   Home,
+  LandingPage,
   NoFounds,
   Skills,
 } from "../Pages";
@@ -26,7 +27,7 @@ function AnimatedRoutes() {
       {/* Page content transitions */}
       <AnimatePresence mode="wait">
         <ReactRoutes location={location} key={location.pathname}>
-          <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
+          <Route path="/" element={<PageWrapper><LandingPage /></PageWrapper>} />
           <Route path={Routes.Home} element={<PageWrapper><Home /></PageWrapper>} />
           <Route path={Routes.About} element={<PageWrapper><About /></PageWrapper>} />
           <Route path={Routes.Skills} element={<PageWrapper><Skills /></PageWrapper>} />

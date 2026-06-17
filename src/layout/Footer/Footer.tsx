@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Typography, Container, IconButton } from '@mui/material';
 import { Icons } from '../../assets/Icons/Icons';
 
