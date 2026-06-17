@@ -3,6 +3,7 @@ import Header from './Header';
 import Footer from './Footer/Footer';
 import { Box, Container } from '@mui/material';
 import { useLocation } from 'react-router-dom';
+import AuroraBackground from '../components/AuroraBackground';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -17,15 +18,24 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: 'background.default', color: 'text.primary' }}>
-      <Header />
-      <Box component="main" sx={{ flexGrow: 1, py: { xs: 4, md: 6 } }}>
-        <Container maxWidth="lg">
-          {children}
-        </Container>
+    <AuroraBackground>
+      <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: 'transparent', color: 'text.primary' }}>
+        <Header />
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            py: { xs: 3, sm: 4, md: 6 },
+            px: { xs: 2, sm: 3, md: 0 },
+          }}
+        >
+          <Container maxWidth="xl">
+            {children}
+          </Container>
+        </Box>
+        <Footer />
       </Box>
-      <Footer />
-    </Box>
+    </AuroraBackground>
   );
 };
 

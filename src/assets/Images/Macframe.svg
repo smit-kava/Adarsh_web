@@ -1,0 +1,653 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" width="800" height="520" fill="none">
+  <defs>
+
+    <!-- Dark panel bg -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d0f14"/>
+      <stop offset="100%" stop-color="#070a0f"/>
+    </linearGradient>
+
+    <!-- Grid surface perspective gradient -->
+    <linearGradient id="gridSurf" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a2030" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#0a0d14" stop-opacity="0.95"/>
+    </linearGradient>
+
+    <!-- Center shaft - blue metallic -->
+    <linearGradient id="shaftBlue" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5bb8f5"/>
+      <stop offset="30%" stop-color="#1a7fd4"/>
+      <stop offset="60%" stop-color="#0a4f9a"/>
+      <stop offset="100%" stop-color="#1a7fd4"/>
+    </linearGradient>
+
+    <!-- Shaft dark cylinder -->
+    <linearGradient id="shaftDark" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1a1e2a"/>
+      <stop offset="35%" stop-color="#2d3348"/>
+      <stop offset="65%" stop-color="#1e2235"/>
+      <stop offset="100%" stop-color="#111420"/>
+    </linearGradient>
+
+    <!-- Big gear gradient -->
+    <linearGradient id="gearGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2a2f3d"/>
+      <stop offset="50%" stop-color="#3d4355"/>
+      <stop offset="100%" stop-color="#1e2230"/>
+    </linearGradient>
+
+    <!-- Small gear -->
+    <linearGradient id="gearSmall" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#22273a"/>
+      <stop offset="50%" stop-color="#303648"/>
+      <stop offset="100%" stop-color="#181c28"/>
+    </linearGradient>
+
+    <!-- Cage ring -->
+    <linearGradient id="cageGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#c8d0e0"/>
+      <stop offset="50%" stop-color="#f0f4ff"/>
+      <stop offset="100%" stop-color="#8090a8"/>
+    </linearGradient>
+
+    <!-- Left disc -->
+    <linearGradient id="discGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e2235"/>
+      <stop offset="50%" stop-color="#2d3348"/>
+      <stop offset="100%" stop-color="#0f1220"/>
+    </linearGradient>
+
+    <!-- Left panel bg -->
+    <linearGradient id="panelLeft" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0e1118"/>
+      <stop offset="100%" stop-color="#141820"/>
+    </linearGradient>
+
+    <!-- Right panel bg -->
+    <linearGradient id="panelRight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#141820"/>
+      <stop offset="100%" stop-color="#0e1118"/>
+    </linearGradient>
+
+    <!-- Blue ring glow -->
+    <filter id="glowBlue" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowRed" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowGreen" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowWhite" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softGlow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="18" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <!-- Clip for panels -->
+    <clipPath id="leftPanelClip">
+      <rect x="0" y="0" width="180" height="520"/>
+    </clipPath>
+    <clipPath id="rightPanelClip">
+      <rect x="620" y="0" width="180" height="520"/>
+    </clipPath>
+
+    <style>
+      @keyframes spinOrbitBlue {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+      }
+      @keyframes spinOrbitRed {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(-360deg); }
+      }
+      @keyframes spinOrbitGreen {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+      }
+      @keyframes spinCage {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+      }
+      @keyframes spinGearL {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(360deg); }
+      }
+      @keyframes spinGearR {
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(-360deg); }
+      }
+      @keyframes pulseGlow {
+        0%, 100% { opacity: 0.5; }
+        50%       { opacity: 0.9; }
+      }
+      @keyframes arrowBob {
+        0%, 100% { transform: translateY(0); }
+        50%       { transform: translateY(-5px); }
+      }
+      @keyframes arrowBobX {
+        0%, 100% { transform: translateX(0); }
+        50%       { transform: translateX(5px); }
+      }
+
+      .orbit-blue  { transform-origin: 400px 272px; animation: spinOrbitBlue  6s linear infinite; }
+      .orbit-red   { transform-origin: 400px 272px; animation: spinOrbitRed   4s linear infinite; }
+      .orbit-green { transform-origin: 400px 272px; animation: spinOrbitGreen  8s linear infinite; }
+      .cage-spin   { transform-origin: 400px 272px; animation: spinCage        12s linear infinite; }
+      .gear-left   { transform-origin: 220px 272px; animation: spinGearL       10s linear infinite; }
+      .gear-right  { transform-origin: 560px 272px; animation: spinGearR       8s linear infinite; }
+      .pulse       { animation: pulseGlow 2.5s ease-in-out infinite; }
+      .arr-y       { animation: arrowBob 2s ease-in-out infinite; }
+      .arr-x       { animation: arrowBobX 2s ease-in-out infinite 0.3s; }
+    </style>
+
+  </defs>
+
+  <!-- ═══════════════════════════════════════
+       BACKGROUND
+  ════════════════════════════════════════ -->
+  <rect width="800" height="520" fill="url(#bgGrad)"/>
+
+  <!-- ═══════════════════════════════════════
+       PERSPECTIVE GRID SURFACE
+  ════════════════════════════════════════ -->
+  <g opacity="0.55">
+    <!-- Grid surface - perspective trapezoid -->
+    <polygon points="80,520 720,520 680,240 120,240" fill="url(#gridSurf)"/>
+
+    <!-- Horizontal grid lines (perspective) -->
+    <line x1="126" y1="250" x2="674" y2="250" stroke="#2a3a55" stroke-width="0.6"/>
+    <line x1="128" y1="265" x2="672" y2="265" stroke="#1e2d44" stroke-width="0.5"/>
+    <line x1="132" y1="285" x2="668" y2="285" stroke="#2a3a55" stroke-width="0.6"/>
+    <line x1="136" y1="310" x2="664" y2="310" stroke="#1e2d44" stroke-width="0.5"/>
+    <line x1="142" y1="340" x2="658" y2="340" stroke="#2a3a55" stroke-width="0.6"/>
+    <line x1="150" y1="375" x2="650" y2="375" stroke="#1e2d44" stroke-width="0.5"/>
+    <line x1="160" y1="415" x2="640" y2="415" stroke="#2a3a55" stroke-width="0.6"/>
+    <line x1="170" y1="460" x2="630" y2="460" stroke="#1e2d44" stroke-width="0.5"/>
+    <line x1="180" y1="510" x2="620" y2="510" stroke="#2a3a55" stroke-width="0.6"/>
+
+    <!-- Vertical grid lines (perspective converging to ~400,220) -->
+    <line x1="400" y1="240" x2="400" y2="520" stroke="#2a3a55" stroke-width="0.6"/>
+    <line x1="400" y1="240" x2="310" y2="520" stroke="#1e2d44" stroke-width="0.5"/>
+    <line x1="400" y1="240" x2="220" y2="520" stroke="#2a3a55" stroke-width="0.6"/>
+    <line x1="400" y1="240" x2="130" y2="520" stroke="#1e2d44" stroke-width="0.5"/>
+    <line x1="400" y1="240" x2="490" y2="520" stroke="#1e2d44" stroke-width="0.5"/>
+    <line x1="400" y1="240" x2="580" y2="520" stroke="#2a3a55" stroke-width="0.6"/>
+    <line x1="400" y1="240" x2="670" y2="520" stroke="#1e2d44" stroke-width="0.5"/>
+    <line x1="400" y1="240" x2="760" y2="520" stroke="#2a3a55" stroke-width="0.6"/>
+  </g>
+
+  <!-- ═══════════════════════════════════════
+       LEFT PANEL (CAD sidebar)
+  ════════════════════════════════════════ -->
+  <g clip-path="url(#leftPanelClip)" opacity="0.75">
+    <rect x="0" y="0" width="175" height="520" fill="url(#panelLeft)"/>
+    <rect x="0" y="0" width="175" height="28" fill="#0a0d14"/>
+    <!-- Header dots -->
+    <circle cx="14" cy="14" r="4" fill="#e05252" opacity="0.8"/>
+    <circle cx="26" cy="14" r="4" fill="#e0a852" opacity="0.8"/>
+    <circle cx="38" cy="14" r="4" fill="#52c452" opacity="0.8"/>
+
+    <!-- Toolbar row -->
+    <rect x="0" y="30" width="175" height="22" fill="#0f1218"/>
+    <!-- Toolbar icons (abstract squares) -->
+    <g fill="#3a4255" opacity="0.9">
+      <rect x="8"  y="36" width="8"  height="8" rx="1"/>
+      <rect x="20" y="36" width="8"  height="8" rx="1"/>
+      <rect x="32" y="36" width="8"  height="8" rx="1"/>
+      <rect x="44" y="36" width="8"  height="8" rx="1"/>
+      <rect x="56" y="36" width="8"  height="8" rx="1"/>
+      <rect x="68" y="36" width="8"  height="8" rx="1"/>
+      <rect x="80" y="36" width="8"  height="8" rx="1"/>
+      <rect x="92" y="36" width="8"  height="8" rx="1"/>
+    </g>
+
+    <!-- File tree lines -->
+    <g stroke="#2a3a50" stroke-width="0.7">
+      <line x1="16" y1="65"  x2="165" y2="65"/>
+      <line x1="16" y1="80"  x2="165" y2="80"/>
+      <line x1="16" y1="95"  x2="165" y2="95"/>
+      <line x1="16" y1="110" x2="165" y2="110"/>
+      <line x1="16" y1="125" x2="165" y2="125"/>
+      <line x1="16" y1="140" x2="165" y2="140"/>
+      <line x1="16" y1="155" x2="165" y2="155"/>
+      <line x1="16" y1="170" x2="165" y2="170"/>
+      <line x1="16" y1="185" x2="165" y2="185"/>
+      <line x1="16" y1="200" x2="165" y2="200"/>
+    </g>
+    <!-- Tree indents (colored dots) -->
+    <circle cx="20" cy="72"  r="2.5" fill="#4a90d9" opacity="0.7"/>
+    <circle cx="20" cy="87"  r="2.5" fill="#4a90d9" opacity="0.5"/>
+    <circle cx="28" cy="102" r="2.5" fill="#e8e0d0" opacity="0.4"/>
+    <circle cx="28" cy="117" r="2.5" fill="#e8c870" opacity="0.6"/>
+    <circle cx="20" cy="132" r="2.5" fill="#4a90d9" opacity="0.7"/>
+    <circle cx="28" cy="147" r="2.5" fill="#e8e0d0" opacity="0.4"/>
+    <circle cx="28" cy="162" r="2.5" fill="#e8e0d0" opacity="0.4"/>
+    <c
+    ircle cx="20" cy="177" r="2.5" fill="#4a90d9" opacity="0.5"/>
+    <circle cx="28" cy="192" r="2.5" fill="#e8c870" opacity="0.6"/>
+    <circle cx="20" cy="207" r="2.5" fill="#4a90d9" opacity="0.5"/>
+
+    <!-- Colored line bars (code/tree) -->
+    <rect x="28" y="69"  width="90" height="5" rx="2" fill="#3a4a60" opacity="0.7"/>
+    <rect x="28" y="84"  width="70" height="5" rx="2" fill="#2a3a50" opacity="0.6"/>
+    <rect x="36" y="99"  width="80" height="5" rx="2" fill="#2a3a50" opacity="0.5"/>
+    <rect x="36" y="114" width="60" height="5" rx="2" fill="#4a6040" opacity="0.7"/>
+    <rect x="28" y="129" width="85" height="5" rx="2" fill="#3a4a60" opacity="0.6"/>
+    <rect x="36" y="144" width="75" height="5" rx="2" fill="#2a3a50" opacity="0.5"/>
+    <rect x="36" y="159" width="65" height="5" rx="2" fill="#2a3a50" opacity="0.5"/>
+    <rect x="28" y="174" width="90" height="5" rx="2" fill="#3a4a60" opacity="0.6"/>
+    <rect x="36" y="189" width="55" height="5" rx="2" fill="#4a6040" opacity="0.7"/>
+    <rect x="28" y="204" width="80" height="5" rx="2" fill="#3a4a60" opacity="0.5"/>
+
+    <!-- Left toolbar vertical (tools) -->
+    <rect x="0" y="54" width="14" height="460" fill="#090c12"/>
+    <g fill="#2a3545">
+      <rect x="2"  y="60"  width="10" height="10" rx="1"/>
+      <rect x="2"  y="76"  width="10" height="10" rx="1"/>
+      <rect x="2"  y="92"  width="10" height="10" rx="1"/>
+      <rect x="2"  y="108" width="10" height="10" rx="1"/>
+      <rect x="2"  y="124" width="10" height="10" rx="1"/>
+      <rect x="2"  y="140" width="10" height="10" rx="1"/>
+      <rect x="2"  y="156" width="10" height="10" rx="1"/>
+      <rect x="2"  y="172" width="10" height="10" rx="1"/>
+    </g>
+    <!-- Active tool highlight -->
+    <rect x="1" y="91" width="12" height="12" rx="2" fill="none" stroke="#4a90d9" stroke-width="1"/>
+
+    <!-- Bottom panel -->
+    <rect x="0" y="360" width="175" height="160" fill="#090c12" opacity="0.8"/>
+    <rect x="8" y="370" width="60"  height="5" rx="2" fill="#2a3a50" opacity="0.6"/>
+    <rect x="8" y="382" width="80"  height="5" rx="2" fill="#2a3a50" opacity="0.5"/>
+    <rect x="8" y="394" width="50"  height="5" rx="2" fill="#2a3a50" opacity="0.5"/>
+    <rect x="8" y="406" width="70"  height="5" rx="2" fill="#2a3a50" opacity="0.6"/>
+    <!-- Small icon buttons in bottom panel -->
+    <g fill="none" stroke="#3a5070" stroke-width="1" opacity="0.7">
+      <rect x="10" y="418" width="14" height="14" rx="2"/>
+      <rect x="30" y="418" width="14" height="14" rx="2"/>
+      <rect x="50" y="418" width="14" height="14" rx="2"/>
+      <rect x="70" y="418" width="14" height="14" rx="2"/>
+    </g>
+  </g>
+
+  <!-- ═══════════════════════════════════════
+       RIGHT PANEL (Properties)
+  ════════════════════════════════════════ -->
+  <g clip-path="url(#rightPanelClip)" opacity="0.75">
+    <rect x="625" y="0" width="175" height="520" fill="url(#panelRight)"/>
+    <rect x="625" y="0" width="175" height="28" fill="#0a0d14"/>
+
+    <!-- Toolbar icons right -->
+    <rect x="625" y="30" width="175" height="22" fill="#0f1218"/>
+    <g fill="#3a4255" opacity="0.9">
+      <rect x="630" y="36" width="8" height="8" rx="1"/>
+      <rect x="642" y="36" width="8" height="8" rx="1"/>
+      <rect x="654" y="36" width="8" height="8" rx="1"/>
+      <rect x="666" y="36" width="8" height="8" rx="1"/>
+      <rect x="678" y="36" width="8" height="8" rx="1"/>
+      <rect x="690" y="36" width="8" height="8" rx="1"/>
+      <rect x="702" y="36" width="8" height="8" rx="1"/>
+      <rect x="714" y="36" width="8" height="8" rx="1"/>
+      <rect x="726" y="36" width="8" height="8" rx="1"/>
+      <rect x="738" y="36" width="8" height="8" rx="1"/>
+      <rect x="750" y="36" width="8" height="8" rx="1"/>
+      <rect x="762" y="36" width="8" height="8" rx="1"/>
+    </g>
+
+    <!-- 3D axis gizmo -->
+    <g transform="translate(700,90)">
+      <circle cx="0" cy="0" r="22" fill="#12161f" stroke="#2a3545" stroke-width="1"/>
+      <!-- X axis red -->
+      <line x1="0" y1="0" x2="18" y2="0"   stroke="#e05252" stroke-width="2" stroke-linecap="round"/>
+      <polygon points="18,0 14,-3 14,3" fill="#e05252"/>
+      <!-- Y axis green -->
+      <line x1="0" y1="0" x2="-8" y2="-16"  stroke="#52c452" stroke-width="2" stroke-linecap="round"/>
+      <polygon points="-8,-16 -12,-12 -4,-12" fill="#52c452"/>
+      <!-- Z axis blue -->
+      <line x1="0" y1="0" x2="-16" y2="5"  stroke="#4a90d9" stroke-width="2" stroke-linecap="round"/>
+      <polygon points="-16,5 -11,1 -13,7" fill="#4a90d9"/>
+      <!-- Center dot -->
+      <circle cx="0" cy="0" r="2.5" fill="#e8e0d0"/>
+    </g>
+
+    <!-- Property lines -->
+    <g opacity="0.7">
+      <rect x="636" y="125" width="45" height="5" rx="2" fill="#2a3a50"/>
+      <rect x="636" y="140" width="55" height="5" rx="2" fill="#2a3a50"/>
+      <rect x="644" y="152" width="30" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="680" y="152" width="30" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="644" y="162" width="30" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="680" y="162" width="30" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="644" y="172" width="30" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="680" y="172" width="30" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="636" y="185" width="50" height="5" rx="2" fill="#2a3a50"/>
+      <rect x="644" y="197" width="30" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="680" y="197" width="30" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="644" y="207" width="30" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="680" y="207" width="30" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="636" y="220" width="40" height="5" rx="2" fill="#2a3a50"/>
+      <rect x="644" y="232" width="30" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="680" y="232" width="30" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="644" y="242" width="30" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="680" y="242" width="30" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="636" y="255" width="48" height="5" rx="2" fill="#2a3a50"/>
+      <rect x="644" y="267" width="30" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="680" y="267" width="30" height="4" rx="2" fill="#1e2d44"/>
+    </g>
+
+    <!-- Properties bottom panel -->
+    <rect x="625" y="320" width="175" height="200" fill="#090c12" opacity="0.9"/>
+    <g opacity="0.6">
+      <rect x="636" y="330" width="50" height="5" rx="2" fill="#2a3a50"/>
+      <rect x="636" y="345" width="60" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="636" y="360" width="55" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="636" y="375" width="45" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="636" y="390" width="60" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="636" y="405" width="50" height="5" rx="2" fill="#2a3a50"/>
+      <rect x="636" y="420" width="55" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="636" y="435" width="40" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="636" y="450" width="60" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="636" y="465" width="45" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="636" y="480" width="55" height="4" rx="2" fill="#1e2d44"/>
+      <rect x="636" y="495" width="50" height="4" rx="2" fill="#1e2d44"/>
+    </g>
+  </g>
+
+  <!-- ═══════════════════════════════════════
+       TOP TOOLBAR (center viewport header)
+  ════════════════════════════════════════ -->
+  <rect x="175" y="0" width="450" height="28" fill="#0b0e16"/>
+  <rect x="175" y="28" width="450" height="22" fill="#0f1218"/>
+  <!-- Tab buttons -->
+  <rect x="185" y="32" width="55" height="14" rx="3" fill="#1a2030"/>
+  <rect x="245" y="32" width="55" height="14" rx="3" fill="#252d3d"/>
+  <rect x="305" y="32" width="55" height="14" rx="3" fill="#1a2030"/>
+  <rect x="365" y="32" width="55" height="14" rx="3" fill="#1a2030"/>
+  <rect x="425" y="32" width="55" height="14" rx="3" fill="#1a2030"/>
+  <!-- Active tab indicator -->
+  <rect x="185" y="44" width="55" height="2" rx="1" fill="#4a90d9"/>
+  <!-- Dot buttons top right area -->
+  <g fill="#2a3545">
+    <circle cx="555" cy="14" r="5"/>
+    <circle cx="570" cy="14" r="5"/>
+    <circle cx="585" cy="14" r="5"/>
+    <circle cx="600" cy="14" r="5"/>
+    <circle cx="615" cy="14" r="5"/>
+  </g>
+
+  <!-- ═══════════════════════════════════════
+       VIEWPORT AMBIENT GLOW
+  ════════════════════════════════════════ -->
+  <ellipse cx="400" cy="272" rx="180" ry="130" fill="#0a2555" opacity="0.35" filter="url(#softGlow)"/>
+
+  <!-- ═══════════════════════════════════════
+       LEFT DISC / COUPLING
+  ════════════════════════════════════════ -->
+  <!-- Main disc body -->
+  <ellipse cx="220" cy="272" rx="22" ry="58" fill="url(#discGrad)" stroke="#3a4255" stroke-width="1.5"/>
+  <!-- Disc grooves -->
+  <ellipse cx="220" cy="272" rx="16" ry="50" fill="none" stroke="#2a3248" stroke-width="1"/>
+  <ellipse cx="220" cy="272" rx="10" ry="40" fill="none" stroke="#2a3248" stroke-width="0.8"/>
+  <ellipse cx="220" cy="272" rx="5"  ry="28" fill="#0a0e18" stroke="#1e2535" stroke-width="1"/>
+  <!-- Disc lobes -->
+  <ellipse cx="212" cy="272" rx="8" ry="18" fill="#161c2a" stroke="#252d3d" stroke-width="1"/>
+  <ellipse cx="228" cy="272" rx="8" ry="18" fill="#161c2a" stroke="#252d3d" stroke-width="1"/>
+  <!-- Inner coupling holes -->
+  <ellipse cx="215" cy="255" rx="4" ry="6" fill="#070a0f"/>
+  <ellipse cx="225" cy="255" rx="4" ry="6" fill="#070a0f"/>
+  <ellipse cx="215" cy="289" rx="4" ry="6" fill="#070a0f"/>
+  <ellipse cx="225" cy="289" rx="4" ry="6" fill="#070a0f"/>
+
+  <!-- ═══════════════════════════════════════
+       MAIN SHAFT (horizontal tube)
+  ════════════════════════════════════════ -->
+  <!-- Outer shaft cylinder -->
+  <rect x="220" y="256" width="330" height="32" rx="4" fill="url(#shaftDark)" stroke="#2a3248" stroke-width="1"/>
+  <!-- Shaft highlight stripe -->
+  <rect x="222" y="258" width="326" height="8" rx="3" fill="#232840" opacity="0.9"/>
+  <!-- Shaft lower shadow -->
+  <rect x="222" y="274" width="326" height="12" rx="2" fill="#0f1220" opacity="0.6"/>
+
+  <!-- Blue center section (bearing housing) -->
+  <rect x="340" y="250" width="120" height="44" rx="5" fill="#0d3875" stroke="#2060b0" stroke-width="1.2"/>
+  <!-- Blue highlight -->
+  <rect x="342" y="252" width="116" height="12" rx="3" fill="#1a5ab0" opacity="0.8"/>
+  <!-- Bearing rings on blue section -->
+  <line x1="360" y1="250" x2="360" y2="294" stroke="#1a7fd4" stroke-width="1.5" opacity="0.7"/>
+  <line x1="390" y1="250" x2="390" y2="294" stroke="#1a7fd4" stroke-width="1.5" opacity="0.7"/>
+  <line x1="420" y1="250" x2="420" y2="294" stroke="#1a7fd4" stroke-width="1.5" opacity="0.7"/>
+  <line x1="450" y1="250" x2="450" y2="294" stroke="#1a7fd4" stroke-width="1.5" opacity="0.7"/>
+  <!-- Shaft end cap right -->
+  <ellipse cx="550" cy="272" rx="12" ry="18" fill="#1e2535" stroke="#3a4558" stroke-width="1.2"/>
+  <ellipse cx="550" cy="272" rx="7"  ry="12" fill="#0f1422"/>
+
+  <!-- ═══════════════════════════════════════
+       LEFT LARGE GEAR
+  ════════════════════════════════════════ -->
+  <g class="gear-left">
+    <!-- Gear body -->
+    <ellipse cx="220" cy="272" rx="70" ry="72" fill="url(#gearGrad)" stroke="#3a4358" stroke-width="1.5"/>
+    <!-- Inner ring -->
+    <ellipse cx="220" cy="272" rx="52" ry="54" fill="none" stroke="#2a3348" stroke-width="1.2"/>
+    <!-- Inner ring 2 -->
+    <ellipse cx="220" cy="272" rx="36" ry="38" fill="#181d2a" stroke="#252e3d" stroke-width="1"/>
+    <!-- Hub -->
+    <ellipse cx="220" cy="272" rx="18" ry="18" fill="#0f1220" stroke="#2a3545" stroke-width="1.2"/>
+
+    <!-- Gear teeth (12 teeth as rectangles rotated) -->
+    <g fill="#3a4358" stroke="#2a3248" stroke-width="0.8">
+      <rect x="215" y="192" width="10" height="16" rx="2" transform="rotate(0,220,272)"/>
+      <rect x="215" y="192" width="10" height="16" rx="2" transform="rotate(30,220,272)"/>
+      <rect x="215" y="192" width="10" height="16" rx="2" transform="rotate(60,220,272)"/>
+      <rect x="215" y="192" width="10" height="16" rx="2" transform="rotate(90,220,272)"/>
+      <rect x="215" y="192" width="10" height="16" rx="2" transform="rotate(120,220,272)"/>
+      <rect x="215" y="192" width="10" height="16" rx="2" transform="rotate(150,220,272)"/>
+      <rect x="215" y="192" width="10" height="16" rx="2" transform="rotate(180,220,272)"/>
+      <rect x="215" y="192" width="10" height="16" rx="2" transform="rotate(210,220,272)"/>
+      <rect x="215" y="192" width="10" height="16" rx="2" transform="rotate(240,220,272)"/>
+      <rect x="215" y="192" width="10" height="16" rx="2" transform="rotate(270,220,272)"/>
+      <rect x="215" y="192" width="10" height="16" rx="2" transform="rotate(300,220,272)"/>
+      <rect x="215" y="192" width="10" height="16" rx="2" transform="rotate(330,220,272)"/>
+    </g>
+
+    <!-- Spokes -->
+    <g stroke="#2a3348" stroke-width="2" opacity="0.8">
+      <line x1="220" y1="272" x2="220" y2="238" transform="rotate(0,220,272)"/>
+      <line x1="220" y1="272" x2="220" y2="238" transform="rotate(60,220,272)"/>
+      <line x1="220" y1="272" x2="220" y2="238" transform="rotate(120,220,272)"/>
+      <line x1="220" y1="272" x2="220" y2="238" transform="rotate(180,220,272)"/>
+      <line x1="220" y1="272" x2="220" y2="238" transform="rotate(240,220,272)"/>
+      <line x1="220" y1="272" x2="220" y2="238" transform="rotate(300,220,272)"/>
+    </g>
+  </g>
+
+  <!-- ═══════════════════════════════════════
+       RIGHT SMALL GEAR
+  ════════════════════════════════════════ -->
+  <g class="gear-right">
+    <ellipse cx="560" cy="272" rx="50" ry="52" fill="url(#gearSmall)" stroke="#2a3248" stroke-width="1.5"/>
+    <ellipse cx="560" cy="272" rx="36" ry="38" fill="none" stroke="#1e2d40" stroke-width="1"/>
+    <ellipse cx="560" cy="272" rx="22" ry="22" fill="#111520" stroke="#222a38" stroke-width="1"/>
+    <ellipse cx="560" cy="272" rx="10" ry="10" fill="#0a0d14" stroke="#1e2535" stroke-width="1"/>
+
+    <!-- Teeth (10 teeth) -->
+    <g fill="#2a3248" stroke="#1e2535" stroke-width="0.8">
+      <rect x="555" y="214" width="10" height="14" rx="2" transform="rotate(0,560,272)"/>
+      <rect x="555" y="214" width="10" height="14" rx="2" transform="rotate(36,560,272)"/>
+      <rect x="555" y="214" width="10" height="14" rx="2" transform="rotate(72,560,272)"/>
+      <rect x="555" y="214" width="10" height="14" rx="2" transform="rotate(108,560,272)"/>
+      <rect x="555" y="214" width="10" height="14" rx="2" transform="rotate(144,560,272)"/>
+      <rect x="555" y="214" width="10" height="14" rx="2" transform="rotate(180,560,272)"/>
+      <rect x="555" y="214" width="10" height="14" rx="2" transform="rotate(216,560,272)"/>
+      <rect x="555" y="214" width="10" height="14" rx="2" transform="rotate(252,560,272)"/>
+      <rect x="555" y="214" width="10" height="14" rx="2" transform="rotate(288,560,272)"/>
+      <rect x="555" y="214" width="10" height="14" rx="2" transform="rotate(324,560,272)"/>
+    </g>
+
+    <!-- Spokes -->
+    <g stroke="#1e2d40" stroke-width="1.5" opacity="0.8">
+      <line x1="560" y1="272" x2="560" y2="248" transform="rotate(0,560,272)"/>
+      <line x1="560" y1="272" x2="560" y2="248" transform="rotate(72,560,272)"/>
+      <line x1="560" y1="272" x2="560" y2="248" transform="rotate(144,560,272)"/>
+      <line x1="560" y1="272" x2="560" y2="248" transform="rotate(216,560,272)"/>
+      <line x1="560" y1="272" x2="560" y2="248" transform="rotate(288,560,272)"/>
+    </g>
+  </g>
+
+  <!-- ═══════════════════════════════════════
+       CAGE / BEARING RETAINER (white wireframe)
+  ════════════════════════════════════════ -->
+  <g class="cage-spin" filter="url(#glowWhite)" opacity="0.85">
+    <!-- Outer cage ring -->
+    <ellipse cx="400" cy="272" rx="95" ry="40" fill="none" stroke="#d0d8e8" stroke-width="1.5"/>
+    <!-- Inner cage ring -->
+    <ellipse cx="400" cy="272" rx="75" ry="32" fill="none" stroke="#b0b8c8" stroke-width="1"/>
+    <!-- Cage struts (vertical) -->
+    <g stroke="#c0c8d8" stroke-width="1.2">
+      <line x1="320" y1="272" x2="315" y2="255"/>
+      <line x1="320" y1="272" x2="315" y2="289"/>
+      <line x1="340" y1="254" x2="338" y2="242"/>
+      <line x1="340" y1="290" x2="338" y2="302"/>
+      <line x1="370" y1="235" x2="370" y2="225"/>
+      <line x1="370" y1="309" x2="370" y2="319"/>
+      <line x1="400" y1="232" x2="400" y2="222"/>
+      <line x1="400" y1="312" x2="400" y2="322"/>
+      <line x1="430" y1="235" x2="430" y2="225"/>
+      <line x1="430" y1="309" x2="430" y2="319"/>
+      <line x1="460" y1="254" x2="462" y2="242"/>
+      <line x1="460" y1="290" x2="462" y2="302"/>
+      <line x1="480" y1="272" x2="485" y2="256"/>
+      <line x1="480" y1="272" x2="485" y2="288"/>
+    </g>
+    <!-- Cage ball pockets -->
+    <circle cx="320" cy="272" r="5" fill="none" stroke="#d0d8e8" stroke-width="1"/>
+    <circle cx="350" cy="248" r="5" fill="none" stroke="#d0d8e8" stroke-width="1"/>
+    <circle cx="400" cy="234" r="5" fill="none" stroke="#d0d8e8" stroke-width="1"/>
+    <circle cx="450" cy="248" r="5" fill="none" stroke="#d0d8e8" stroke-width="1"/>
+    <circle cx="480" cy="272" r="5" fill="none" stroke="#d0d8e8" stroke-width="1"/>
+    <circle cx="450" cy="296" r="5" fill="none" stroke="#d0d8e8" stroke-width="1"/>
+    <circle cx="400" cy="310" r="5" fill="none" stroke="#d0d8e8" stroke-width="1"/>
+    <circle cx="350" cy="296" r="5" fill="none" stroke="#d0d8e8" stroke-width="1"/>
+  </g>
+
+  <!-- ═══════════════════════════════════════
+       ORBITAL RINGS (animated)
+  ════════════════════════════════════════ -->
+
+  <!-- Blue orbit (horizontal ellipse) -->
+  <g class="orbit-blue" filter="url(#glowBlue)">
+    <ellipse cx="400" cy="272" rx="108" ry="46" fill="none" stroke="#4a90d9" stroke-width="2.2" stroke-dasharray="6 3"/>
+    <ellipse cx="400" cy="272" rx="108" ry="46" fill="none" stroke="#88c0f8" stroke-width="0.8" opacity="0.5"/>
+  </g>
+
+  <!-- Red orbit (tilted ellipse) -->
+  <g class="orbit-red" filter="url(#glowRed)">
+    <ellipse cx="400" cy="272" rx="108" ry="30" fill="none" stroke="#e05050" stroke-width="2" stroke-dasharray="8 3" transform="rotate(-30,400,272)"/>
+    <ellipse cx="400" cy="272" rx="108" ry="30" fill="none" stroke="#ff8888" stroke-width="0.8" opacity="0.4" transform="rotate(-30,400,272)"/>
+  </g>
+
+  <!-- Green orbit (vertical ellipse) -->
+  <g class="orbit-green" filter="url(#glowGreen)">
+    <ellipse cx="400" cy="272" rx="30" ry="108" fill="none" stroke="#52c452" stroke-width="2" stroke-dasharray="8 3"/>
+    <ellipse cx="400" cy="272" rx="30" ry="108" fill="none" stroke="#88e888" stroke-width="0.8" opacity="0.4"/>
+  </g>
+
+  <!-- ═══════════════════════════════════════
+       AXIS ARROWS (bobbing)
+  ════════════════════════════════════════ -->
+
+  <!-- Green Y axis arrow (up) -->
+  <g class="arr-y">
+    <line x1="400" y1="272" x2="400" y2="152" stroke="#52c452" stroke-width="2.5" stroke-linecap="round" filter="url(#glowGreen)"/>
+    <polygon points="400,140 393,158 407,158" fill="#52c452" filter="url(#glowGreen)"/>
+  </g>
+
+  <!-- Green Y axis arrow (down) -->
+  <g class="arr-y">
+    <line x1="400" y1="272" x2="400" y2="392" stroke="#52c452" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+    <polygon points="400,400 393,386 407,386" fill="#52c452" opacity="0.5"/>
+  </g>
+
+  <!-- Red X axis arrow (right) -->
+  <g class="arr-x">
+    <line x1="400" y1="272" x2="530" y2="180" stroke="#e05050" stroke-width="2.5" stroke-linecap="round" filter="url(#glowRed)"/>
+    <polygon points="536,176 516,178 524,192" fill="#e05050" filter="url(#glowRed)"/>
+  </g>
+
+  <!-- Blue Z axis arrow (left-forward) -->
+  <g class="arr-x">
+    <line x1="400" y1="272" x2="270" y2="180" stroke="#4a90d9" stroke-width="2.5" stroke-linecap="round" opacity="0.7" filter="url(#glowBlue)"/>
+    <polygon points="264,176 284,178 276,192" fill="#4a90d9" filter="url(#glowBlue)" opacity="0.7"/>
+  </g>
+
+  <!-- ═══════════════════════════════════════
+       BLUE ORBITAL PARTICLES
+  ════════════════════════════════════════ -->
+  <g class="orbit-blue">
+    <circle cx="508" cy="272" r="5" fill="#4a90d9" opacity="0.9" filter="url(#glowBlue)"/>
+    <circle cx="292" cy="272" r="4" fill="#4a90d9" opacity="0.7"/>
+  </g>
+
+  <!-- ═══════════════════════════════════════
+       BOTTOM INFO STRIP (viewport)
+  ════════════════════════════════════════ -->
+  <rect x="175" y="490" width="450" height="30" fill="#090c12" opacity="0.9"/>
+  <g opacity="0.5">
+    <rect x="190" y="498" width="40" height="6" rx="2" fill="#2a3a50"/>
+    <rect x="238" y="498" width="60" height="6" rx="2" fill="#2a3a50"/>
+    <rect x="306" y="498" width="50" height="6" rx="2" fill="#2a3a50"/>
+    <rect x="364" y="498" width="30" height="6" rx="2" fill="#2a3a50"/>
+    <rect x="402" y="498" width="45" height="6" rx="2" fill="#2a3a50"/>
+    <rect x="455" y="498" width="55" height="6" rx="2" fill="#2a3a50"/>
+    <rect x="518" y="498" width="40" height="6" rx="2" fill="#2a3a50"/>
+    <rect x="566" y="498" width="44" height="6" rx="2" fill="#2a3a50"/>
+  </g>
+
+  <!-- ═══════════════════════════════════════
+       BOTTOM PROPERTIES PANEL (viewport)
+  ════════════════════════════════════════ -->
+  <rect x="175" y="430" width="450" height="60" fill="#0b0e16" opacity="0.92"/>
+  <rect x="175" y="430" width="450" height="1"  fill="#1e2535"/>
+  <!-- Property rows -->
+  <g opacity="0.65">
+    <!-- Row 1 -->
+    <rect x="195" y="442" width="55" height="5" rx="2" fill="#2a3a50"/>
+    <rect x="266" y="442" width="25" height="5" rx="2" fill="#1e2d44"/>
+    <rect x="298" y="442" width="25" height="5" rx="2" fill="#1e2d44"/>
+    <rect x="330" y="442" width="25" height="5" rx="2" fill="#1e2d44"/>
+    <rect x="368" y="442" width="20" height="5" rx="2" fill="#3a4a60"/>
+    <!-- Row 2 -->
+    <rect x="195" y="455" width="65" height="5" rx="2" fill="#2a3a50"/>
+    <rect x="276" y="455" width="25" height="5" rx="2" fill="#1e2d44"/>
+    <rect x="308" y="455" width="25" height="5" rx="2" fill="#1e2d44"/>
+    <rect x="340" y="455" width="25" height="5" rx="2" fill="#1e2d44"/>
+    <rect x="375" y="455" width="20" height="5" rx="2" fill="#3a4a60"/>
+    <!-- Row 3 -->
+    <rect x="195" y="468" width="60" height="5" rx="2" fill="#2a3a50"/>
+    <rect x="271" y="468" width="25" height="5" rx="2" fill="#1e2d44"/>
+    <rect x="303" y="468" width="25" height="5" rx="2" fill="#1e2d44"/>
+    <rect x="335" y="468" width="25" height="5" rx="2" fill="#1e2d44"/>
+    <rect x="370" y="468" width="20" height="5" rx="2" fill="#3a4a60"/>
+    <!-- Row 4 -->
+    <rect x="195" y="480" width="58" height="5" rx="2" fill="#2a3a50"/>
+    <rect x="270" y="480" width="25" height="5" rx="2" fill="#1e2d44"/>
+    <rect x="302" y="480" width="25" height="5" rx="2" fill="#1e2d44"/>
+    <rect x="334" y="480" width="25" height="5" rx="2" fill="#1e2d44"/>
+    <rect x="371" y="480" width="20" height="5" rx="2" fill="#3a4a60"/>
+  </g>
+
+  <!-- ═══════════════════════════════════════
+       GLOW PULSE CENTER
+  ════════════════════════════════════════ -->
+  <ellipse cx="400" cy="272" rx="50" ry="28" fill="#1a5ab0" class="pulse" opacity="0.18"/>
+
+</svg>
+
+

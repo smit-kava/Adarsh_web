@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import AuroraBackground from "../components/AuroraBackground";
+import TextReveal from "../components/Textreveal";
 
 interface LoadingPageProps {
     /** Called when loading animation completes — navigate to home here */
@@ -91,7 +92,8 @@ const LoadingPage: React.FC<LoadingPageProps> = ({
                                     lineHeight: 1.1,
                                 }}
                             >
-                                Adarsh Kava
+                                <TextReveal text="Adarsh Kava" delay={0.8} />
+
                             </motion.h1>
 
                             {/* Divider line */}

@@ -9,17 +9,18 @@ export default function LandingPage() {
     const navigate = useNavigate();
 
     return (
-        <Box
-            sx={{
-                minHeight: "100vh",
-                bgcolor: "transparent",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-            }}
-        >
-            <AuroraBackground />
-            <Box sx={{ textAlign: "center" }}>
+        <AuroraBackground>
+            <Box
+                sx={{
+                    minHeight: "100vh",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    px: 3,
+                }}
+            >
                 <Typography
                     variant="h1"
                     sx={{ fontWeight: 800 }}
@@ -43,6 +44,6 @@ export default function LandingPage() {
                     Enter Portfolio
                 </Button>
             </Box>
-        </Box>
+        </AuroraBackground>
     );
 }
