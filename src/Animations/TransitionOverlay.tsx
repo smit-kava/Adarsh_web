@@ -1,7 +1,6 @@
 import { AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import HorizontalLineTransition from "./HorizontalLineTransition";
 import VerticalLineTransition from "./VerticalLineTransition";
 
 /**
@@ -29,7 +28,7 @@ export default function TransitionOverlay() {
 
     return (
         <AnimatePresence>
-            {show && <HorizontalLineTransition key={key} /> && <VerticalLineTransition key={key} />}
+            {show && <VerticalLineTransition key={key} />}
         </AnimatePresence>
     );
 }

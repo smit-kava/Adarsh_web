@@ -1,430 +1,324 @@
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import MacframeSvg from "../assets/Images/Macframe.svg";
 import TextReveal from "../components/Textreveal";
+import "../Herosection.css";
 
-/**
- * HeroSection
- * -----------
- * Responsive two-column hero layout.
- *
- * Breakpoints:
- *  ≥ 900px  → side-by-side: Left col (text + CTAs) | Right col (Mac SVG)
- *  < 900px  → stacked:      Text content on top, Mac SVG hidden (clean mobile)
- *  ≥ 1440px → max-width capped at 1440px, centered with generous padding
- */
+/* ─── Geometry helpers ─────────────────────────────────────── */
 
-/* ─── Responsive hook ──────────────────────────────────────────────────────── */
-function useBreakpoint() {
-    const [width, setWidth] = useState(() =>
-        typeof window !== "undefined" ? window.innerWidth : 1280
-    );
-    useEffect(() => {
-        const onResize = () => setWidth(window.innerWidth);
-        window.addEventListener("resize", onResize);
-        return () => window.removeEventListener("resize", onResize);
-    }, []);
-    return {
-        isMobile: width < 600,
-        isTablet: width >= 600 && width < 900,
-        isDesktop: width >= 900,
-        isWide: width >= 1440,
-        width,
-    };
+function polar(cx: number, cy: number, r: number, deg: number): [number, number] {
+    const rad = (deg * Math.PI) / 180;
+    return [cx + r * Math.cos(rad), cy + r * Math.sin(rad)];
 }
 
-const HeroSection: React.FC = () => {
-    const { isMobile, isTablet, isDesktop, isWide } = useBreakpoint();
-    const isSmall = isMobile || isTablet; // < 900px
+function buildGearPath(cx: number, cy: number, teeth: number, outerR: number, rootR: number): string {
+    const sector = 360 / teeth;
+    const step = sector / 4;
+    const cmds: string[] = [];
+    for (let i = 0; i < teeth; i++) {
+        const a0 = i * sector;
+        const [p0, p1, p2, p3] = [
+            polar(cx, cy, rootR, a0),
+            polar(cx, cy, outerR, a0 + step),
+            polar(cx, cy, outerR, a0 + step * 2),
+            polar(cx, cy, rootR, a0 + step * 3),
+        ];
+        cmds.push(`${i === 0 ? "M" : "L"} ${p0[0].toFixed(2)} ${p0[1].toFixed(2)}`);
+        cmds.push(`L ${p1[0].toFixed(2)} ${p1[1].toFixed(2)}`);
+        cmds.push(`L ${p2[0].toFixed(2)} ${p2[1].toFixed(2)}`);
+        cmds.push(`L ${p3[0].toFixed(2)} ${p3[1].toFixed(2)}`);
+    }
+    return cmds.join(" ") + " Z";
+}
+
+function buildTicks(xStart: number, xEnd: number, y: number, step = 14, longEvery = 5) {
+    const n = Math.floor((xEnd - xStart) / step);
+    return Array.from({ length: n + 1 }, (_, i) => ({
+        x: xStart + i * step,
+        y1: y,
+        y2: y - (i % longEvery === 0 ? 10 : 5),
+    }));
+}
+
+function boltHoles(cx: number, cy: number, r: number, count: number) {
+    return Array.from({ length: count }, (_, i) => {
+        const [x, y] = polar(cx, cy, r, i * (360 / count));
+        return { x, y };
+    });
+}
+
+function buildKnurl(cx: number, cy: number, r: number, count: number) {
+    return Array.from({ length: count }, (_, i) => {
+        const a = i * (360 / count);
+        const [x1, y1] = polar(cx, cy, r, a);
+        const [x2, y2] = polar(cx, cy, r + 4, a);
+        return { x1, y1, x2, y2 };
+    });
+}
+
+/* ─── Constants ────────────────────────────────────────────── */
+const CX = 300, CY = 260;
+const OUTER_R = 140, ROOT_R = 122, TEETH = 16;
+const PITCH_R = (OUTER_R + ROOT_R) / 2;
+const GEAR_PATH = buildGearPath(CX, CY, TEETH, OUTER_R, ROOT_R);
+const BOLT_HOLES = boltHoles(CX, CY, 70, 6);
+const BEAM_TICKS = buildTicks(CX - OUTER_R, CX + OUTER_R, 445);
+const TW_X = 568, TW_Y = 445, TW_R = 11;
+const KNURL = buildKnurl(TW_X, TW_Y, TW_R, 10);
+
+/* Theme colors — optimised for the light AuroraBackground */
+const INK = "#0f172a";   /* near-black  */
+const GRAPHITE = "#475569";   /* slate-600   */
+const BLUEPRINT = "#2563eb";   /* blue-600    */
+const SPARK = "#f97316";   /* orange-500  */
+
+/* ─── Engineering Sketch SVG ───────────────────────────────── */
+const EngineeringSketch: React.FC = () => {
+    const svgRef = useRef<SVGSVGElement | null>(null);
+    const [drawn, setDrawn] = useState(false);
+
+    useEffect(() => {
+        const svg = svgRef.current;
+        if (!svg) return;
+        const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+        const els = Array.from(svg.querySelectorAll<SVGGeometryElement>(".mde-draw"));
+
+        if (reduced) {
+            els.forEach(el => { el.style.strokeDasharray = ""; el.style.strokeDashoffset = "0"; });
+            setDrawn(true);
+            return;
+        }
+
+        els.forEach(el => {
+            try {
+                const len = el.getTotalLength();
+                el.style.transition = "none";
+                el.style.strokeDasharray = `${len} ${len}`;
+                el.style.strokeDashoffset = `${len}`;
+            } catch { el.style.strokeDashoffset = "0"; }
+        });
+
+        let r2 = 0;
+        const r1 = requestAnimationFrame(() => {
+            r2 = requestAnimationFrame(() => {
+                els.forEach(el => {
+                    const d = parseFloat(el.dataset.delay ?? "0");
+                    el.style.transition = `stroke-dashoffset 1.25s cubic-bezier(0.45,0,0.2,1) ${d}s`;
+                    el.style.strokeDashoffset = "0";
+                });
+            });
+        });
+        const t = setTimeout(() => setDrawn(true), 2700);
+        return () => { cancelAnimationFrame(r1); cancelAnimationFrame(r2); clearTimeout(t); };
+    }, []);
 
     return (
-        <section
-            style={{
-                minHeight: "100vh",
-                display: "flex",
-                alignItems: "center",
-                /* Responsive horizontal padding */
-                padding: isMobile
-                    ? "80px 20px 40px"       // mobile: top pad for header clearance
-                    : isTablet
-                    ? "80px 40px 40px"
-                    : isWide
-                    ? "0 96px"               // wide: generous side padding
-                    : "0 clamp(32px, 5vw, 72px)",
-                maxWidth: isWide ? "1600px" : "1280px",
-                margin: "0 auto",
-                width: "100%",
-                boxSizing: "border-box",
-            }}
+        <svg
+            ref={svgRef}
+            viewBox="0 0 640 600"
+            className={`mde-illustration${drawn ? " is-drawn" : ""}`}
+            role="img"
+            aria-label="Technical sketch: gear, light bulb, and caliper"
         >
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: isSmall ? "column" : "row",
-                    alignItems: isSmall ? "flex-start" : "center",
-                    justifyContent: "space-between",
-                    width: "100%",
-                    gap: isMobile ? "48px" : isTablet ? "40px" : "48px",
-                }}
-            >
-                {/* ── LEFT COLUMN ── */}
-                <div
-                    style={{
-                        flex: isSmall ? "unset" : "1 1 420px",
-                        width: isSmall ? "100%" : undefined,
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "flex-start",
-                    }}
-                >
-                    {/* Availability badge */}
-                    <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                        style={{
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "6px",
-                            padding: "5px 14px",
-                            border: "1px solid #bfdbfe",
-                            borderRadius: "999px",
-                            marginBottom: isMobile ? "20px" : "28px",
-                            background: "#eff6ff",
-                        }}
-                    >
-                        <span
-                            style={{
-                                width: "6px",
-                                height: "6px",
-                                borderRadius: "50%",
-                                background: "#3b82f6",
-                                flexShrink: 0,
-                                boxShadow: "0 0 6px #3b82f6",
-                            }}
-                        />
-                        <span
-                            style={{
-                                fontFamily: "'Inter', system-ui, sans-serif",
-                                fontSize: isMobile ? "10px" : "11px",
-                                fontWeight: 500,
-                                letterSpacing: "0.08em",
-                                textTransform: "uppercase",
-                                color: "#1d4ed8",
-                            }}
-                        >
-                            Available for Industrial Projects
-                        </span>
-                    </motion.div>
+            <defs>
+                <filter id="sk" x="-20%" y="-20%" width="140%" height="140%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves={2} seed={7} result="n" />
+                    <feDisplacementMap in="SourceGraphic" in2="n" scale={2.6} xChannelSelector="R" yChannelSelector="G" />
+                </filter>
+                <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+                    <feGaussianBlur stdDeviation={4} />
+                </filter>
+            </defs>
 
-                    {/* ADARSH — char-by-char */}
-                    <div style={{ lineHeight: 1, marginBottom: "4px" }}>
-                        <TextReveal
-                            text="ADARSH"
-                            mode="chars"
-                            delay={0.25}
-                            duration={0.45}
-                            stagger={0.055}
-                            style={{
-                                fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif",
-                                fontSize: isMobile
-                                    ? "clamp(48px, 14vw, 68px)"
-                                    : isTablet
-                                    ? "clamp(52px, 10vw, 80px)"
-                                    : isWide
-                                    ? "clamp(80px, 7vw, 112px)"
-                                    : "clamp(56px, 8vw, 96px)",
-                                fontWeight: 800,
-                                letterSpacing: "-0.03em",
-                                color: "#0f172a",
-                                lineHeight: 1,
-                            }}
-                        />
-                    </div>
+            {/* Registration marks */}
+            <g stroke={GRAPHITE} strokeWidth={1} opacity={0.35}>
+                <line x1={24} y1={14} x2={24} y2={34} /><line x1={14} y1={24} x2={34} y2={24} />
+                <line x1={616} y1={566} x2={616} y2={586} /><line x1={606} y1={576} x2={626} y2={576} />
+            </g>
 
-                    {/* KAVA — blue, char-by-char */}
-                    <div style={{ lineHeight: 1, marginBottom: isMobile ? "20px" : "28px" }}>
-                        <TextReveal
-                            text="KAVA"
-                            mode="chars"
-                            delay={0.55}
-                            duration={0.45}
-                            stagger={0.055}
-                            style={{
-                                fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif",
-                                fontSize: isMobile
-                                    ? "clamp(48px, 14vw, 68px)"
-                                    : isTablet
-                                    ? "clamp(52px, 10vw, 80px)"
-                                    : isWide
-                                    ? "clamp(80px, 7vw, 112px)"
-                                    : "clamp(56px, 8vw, 96px)",
-                                fontWeight: 800,
-                                letterSpacing: "-0.03em",
-                                color: "#3b82f6",
-                                lineHeight: 1,
-                            }}
-                        />
-                    </div>
+            {/* Centre reference lines */}
+            <g stroke={GRAPHITE} strokeWidth={1} strokeDasharray="10 4 2 4" opacity={0.5} filter="url(#sk)">
+                <line className="mde-draw" data-delay="0" x1={CX - OUTER_R - 30} y1={CY} x2={CX + OUTER_R + 30} y2={CY} />
+                <line className="mde-draw" data-delay="0" x1={CX} y1={CY - OUTER_R - 30} x2={CX} y2={CY + OUTER_R + 30} />
+            </g>
 
-                    {/* Subtitle — word by word */}
-                    <div style={{ marginBottom: "14px", maxWidth: "100%" }}>
-                        <TextReveal
-                            text="Mechanical Design Engineer • Innovation • Manufacturing Excellence"
-                            mode="words"
-                            delay={0.85}
-                            duration={0.4}
-                            stagger={0.06}
-                            style={{
-                                fontFamily: "'Inter', system-ui, sans-serif",
-                                fontSize: isMobile ? "13px" : "clamp(13px, 1.4vw, 15px)",
-                                fontWeight: 500,
-                                color: "#475569",
-                                lineHeight: 1.5,
-                                maxWidth: isMobile ? "100%" : "480px",
-                            }}
-                        />
-                    </div>
+            {/* Gear rotor */}
+            <g className="mde-gear-rotor" fill="none" stroke={INK} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" filter="url(#sk)">
+                <circle className="mde-draw" data-delay="0" cx={CX} cy={CY} r={PITCH_R} stroke={BLUEPRINT} strokeDasharray="1 6" strokeWidth={1.2} />
+                <path className="mde-draw" data-delay="0.05" d={GEAR_PATH} />
+                <circle className="mde-draw" data-delay="0.1" cx={CX} cy={CY} r={ROOT_R} />
+                {BOLT_HOLES.map((p, i) => (
+                    <circle key={i} className="mde-draw" data-delay={(0.15 + i * 0.02).toFixed(2)} cx={p.x} cy={p.y} r={6} />
+                ))}
+            </g>
 
-                    {/* Body text — slide in */}
-                    <div style={{ marginBottom: isMobile ? "32px" : "40px" }}>
-                        <TextReveal
-                            text="Transforming ideas into precision engineering solutions through Industry 4.0 innovation and structural integrity."
-                            mode="slide"
-                            delay={1.1}
-                            duration={0.6}
-                            style={{
-                                fontFamily: "'Inter', system-ui, sans-serif",
-                                fontSize: isMobile ? "13px" : "clamp(13px, 1.4vw, 15px)",
-                                fontWeight: 400,
-                                color: "#64748b",
-                                lineHeight: 1.7,
-                                maxWidth: isMobile ? "100%" : "420px",
-                                display: "block",
-                            }}
-                        />
-                    </div>
+            {/* Light bulb */}
+            <g fill="none" stroke={INK} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" filter="url(#sk)">
+                <path className="mde-draw" data-delay="0.5" d="M300 192 C270 192 258 218 262 240 C266 258 278 262 280 278 L282 286 L318 286 L320 278 C322 262 334 258 338 240 C342 218 330 192 300 192Z" />
+                <line className="mde-draw" data-delay="0.62" x1={283} y1={292} x2={317} y2={292} />
+                <line className="mde-draw" data-delay="0.66" x1={285} y1={298} x2={315} y2={298} />
+                <line className="mde-draw" data-delay="0.70" x1={287} y1={304} x2={313} y2={304} />
+                <line className="mde-draw" data-delay="0.74" x1={289} y1={310} x2={311} y2={310} />
+            </g>
 
-                    {/* CTA Buttons */}
-                    <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 1.35, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                        style={{
-                            display: "flex",
-                            gap: "12px",
-                            flexWrap: "wrap",
-                            width: isMobile ? "100%" : undefined,
-                        }}
-                    >
-                        <a
-                            href="#journey"
-                            style={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                gap: "8px",
-                                padding: isMobile ? "13px 0" : "13px 28px",
-                                flex: isMobile ? 1 : undefined,
-                                background: "#0f172a",
-                                color: "#ffffff",
-                                borderRadius: "8px",
-                                fontFamily: "'Inter', system-ui, sans-serif",
-                                fontSize: "14px",
-                                fontWeight: 600,
-                                textDecoration: "none",
-                                letterSpacing: "0.01em",
-                                transition: "background 0.2s, transform 0.15s",
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.background = "#1e293b";
-                                e.currentTarget.style.transform = "translateY(-1px)";
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.background = "#0f172a";
-                                e.currentTarget.style.transform = "translateY(0)";
-                            }}
-                        >
-                            View Journey <span style={{ fontSize: "16px" }}>→</span>
-                        </a>
+            {/* Filament */}
+            <g className="mde-filament" filter="url(#sk)">
+                <path d="M282 222 L296 232 L284 240 L300 250 L288 256 L302 264" fill="none" stroke={SPARK} strokeWidth={2.4} opacity={0.85} filter="url(#glow)" />
+                <path className="mde-draw" data-delay="0.85" d="M282 222 L296 232 L284 240 L300 250 L288 256 L302 264" fill="none" stroke={SPARK} strokeWidth={1.6} />
+            </g>
 
-                        <a
-                            href="#contact"
-                            style={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                gap: "8px",
-                                padding: isMobile ? "13px 0" : "13px 28px",
-                                flex: isMobile ? 1 : undefined,
-                                background: "transparent",
-                                color: "#0f172a",
-                                border: "1.5px solid #cbd5e1",
-                                borderRadius: "8px",
-                                fontFamily: "'Inter', system-ui, sans-serif",
-                                fontSize: "14px",
-                                fontWeight: 600,
-                                textDecoration: "none",
-                                letterSpacing: "0.01em",
-                                transition: "border-color 0.2s, transform 0.15s",
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.borderColor = "#3b82f6";
-                                e.currentTarget.style.transform = "translateY(-1px)";
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.borderColor = "#cbd5e1";
-                                e.currentTarget.style.transform = "translateY(0)";
-                            }}
-                        >
-                            Contact Me
-                        </a>
-                    </motion.div>
-                </div>
+            {/* Sparks */}
+            <g className="mde-sparks" stroke={SPARK} strokeWidth={1.4} strokeLinecap="round" filter="url(#sk)">
+                <line x1={300} y1={178} x2={300} y2={156} />
+                <line x1={324} y1={184} x2={340} y2={166} />
+                <line x1={276} y1={184} x2={260} y2={166} />
+                <line x1={336} y1={202} x2={356} y2={196} />
+                <line x1={264} y1={202} x2={244} y2={196} />
+            </g>
 
-                {/* ── RIGHT COLUMN — Mac SVG (hidden on mobile) ── */}
-                {isDesktop && (
-                    <motion.div
-                        initial={{ opacity: 0, x: 60, scale: 0.95 }}
-                        animate={{ opacity: 1, x: 0, scale: 1 }}
-                        transition={{ delay: 0.4, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-                        style={{
-                            flex: "1 1 380px",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            maxWidth: isWide ? "600px" : "520px",
-                        }}
-                    >
-                        <div style={{ position: "relative", display: "inline-flex" }}>
-                            {/* Soft radial glow */}
-                            <div
-                                style={{
-                                    position: "absolute",
-                                    inset: "-30px",
-                                    background:
-                                        "radial-gradient(ellipse at center, rgba(59,130,246,0.15) 0%, transparent 70%)",
-                                    borderRadius: "50%",
-                                    pointerEvents: "none",
-                                }}
-                            />
+            {/* Caliper */}
+            <g fill="none" stroke={INK} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" filter="url(#sk)">
+                <line className="mde-draw" data-delay="1.0" x1={130} y1={445} x2={585} y2={445} />
+                <line className="mde-draw" data-delay="1.05" x1={160} y1={445} x2={160} y2={CY} />
+                <line className="mde-draw" data-delay="1.05" x1={440} y1={445} x2={440} y2={CY} />
+                <g opacity={0.7} strokeWidth={1}>
+                    {BEAM_TICKS.map((t, i) => <line key={i} x1={t.x} y1={t.y1} x2={t.x} y2={t.y2} />)}
+                </g>
+                <g className="mde-thumbwheel">
+                    <circle className="mde-draw" data-delay="1.2" cx={TW_X} cy={TW_Y} r={TW_R} />
+                    <g strokeWidth={1}>{KNURL.map((k, i) => <line key={i} x1={k.x1} y1={k.y1} x2={k.x2} y2={k.y2} />)}</g>
+                </g>
+                <rect className="mde-draw" data-delay="1.3" x={452} y={394} width={98} height={34} rx={3} />
+                <line strokeWidth={1} x1={490} y1={428} x2={478} y2={445} />
+                <line className="mde-scan-line" x1={160} y1={445} x2={440} y2={445} stroke={BLUEPRINT} strokeWidth={1.4} strokeDasharray="14 10" />
+            </g>
 
-                            {/* Macframe SVG */}
-                            <img
-                                src={MacframeSvg}
-                                alt="Mechanical engineering illustration on Mac monitor"
-                                style={{
-                                    width: "100%",
-                                    maxWidth: isWide ? "560px" : "460px",
-                                    height: "auto",
-                                    position: "relative",
-                                    zIndex: 1,
-                                    filter: "drop-shadow(0 20px 40px rgba(15,23,42,0.12))",
-                                }}
-                            />
+            {/* Readout */}
+            <g fontFamily="'JetBrains Mono', monospace" fontSize={15} fill={INK} filter="url(#sk)">
+                <text x={463} y={416}>&#8960;86.<tspan className="mde-cursor">00</tspan></text>
+            </g>
 
-                            {/* Floating status card */}
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 1.2, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                                style={{
-                                    position: "absolute",
-                                    bottom: "52px",
-                                    left: "50%",
-                                    transform: "translateX(-50%)",
-                                    background: "rgba(255,255,255,0.96)",
-                                    backdropFilter: "blur(12px)",
-                                    borderRadius: "12px",
-                                    padding: "10px 20px 10px 14px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    gap: "12px",
-                                    boxShadow:
-                                        "0 4px 24px rgba(15,23,42,0.12), 0 0 0 1px rgba(203,213,225,0.6)",
-                                    minWidth: "180px",
-                                    zIndex: 10,
-                                    whiteSpace: "nowrap",
-                                }}
-                            >
-                                <div
-                                    style={{
-                                        width: "36px",
-                                        height: "36px",
-                                        borderRadius: "50%",
-                                        background: "#eff6ff",
-                                        border: "1.5px solid #bfdbfe",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        flexShrink: 0,
-                                    }}
-                                >
-                                    <svg
-                                        width="18"
-                                        height="18"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="#3b82f6"
-                                        strokeWidth="1.8"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    >
-                                        <circle cx="12" cy="12" r="3" />
-                                        <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" />
-                                    </svg>
-                                </div>
-                                <div>
-                                    <div
-                                        style={{
-                                            fontFamily: "'Inter', system-ui, sans-serif",
-                                            fontSize: "11px",
-                                            color: "#94a3b8",
-                                            marginBottom: "2px",
-                                        }}
-                                    >
-                                        Project Status
-                                    </div>
-                                    <div
-                                        style={{
-                                            fontFamily: "'Inter', system-ui, sans-serif",
-                                            fontSize: "16px",
-                                            fontWeight: 700,
-                                            color: "#0f172a",
-                                            letterSpacing: "-0.01em",
-                                        }}
-                                    >
-                                        98% Optimized
-                                    </div>
-                                </div>
-                            </motion.div>
-                        </div>
-                    </motion.div>
-                )}
-
-                {/* ── TABLET: show compact monitor without floating card ── */}
-                {isTablet && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        transition={{ delay: 0.5, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                        style={{ width: "100%", display: "flex", justifyContent: "center" }}
-                    >
-                        <img
-                            src={MacframeSvg}
-                            alt="Mechanical engineering illustration on Mac monitor"
-                            style={{
-                                width: "80%",
-                                maxWidth: "380px",
-                                height: "auto",
-                                filter: "drop-shadow(0 12px 24px rgba(15,23,42,0.10))",
-                            }}
-                        />
-                    </motion.div>
-                )}
-            </div>
-        </section>
+            {/* Callout labels */}
+            <g className="mde-callouts">
+                <g filter="url(#sk)">
+                    <circle cx={172} cy={206} r={3} fill={INK} />
+                    <path d="M172 206 L92 132 L60 132" fill="none" stroke={GRAPHITE} strokeWidth={1} />
+                    <text x={60} y={118} fontFamily="'JetBrains Mono', monospace" fontSize={12} letterSpacing={1.5} fill={INK}>MECHANICAL DESIGN</text>
+                </g>
+                <g filter="url(#sk)">
+                    <circle cx={352} cy={194} r={3} fill={SPARK} />
+                    <path d="M352 194 L470 120 L500 120" fill="none" stroke={GRAPHITE} strokeWidth={1} />
+                    <text x={500} y={124} fontFamily="'JetBrains Mono', monospace" fontSize={12} letterSpacing={1.5} fill={SPARK}>INNOVATION</text>
+                </g>
+                <g filter="url(#sk)">
+                    <circle cx={300} cy={445} r={3} fill={BLUEPRINT} />
+                    <path d="M300 445 L300 520" fill="none" stroke={GRAPHITE} strokeWidth={1} />
+                    <text x={300} y={540} textAnchor="middle" fontFamily="'JetBrains Mono', monospace" fontSize={12} letterSpacing={1.5} fill={BLUEPRINT}>MANUFACTURING EXCELLENCE</text>
+                </g>
+            </g>
+        </svg>
     );
 };
+
+/* ─── Hero Section ─────────────────────────────────────────── */
+const HeroSection: React.FC = () => (
+    <section className="mde-hero">
+        <div className="mde-grid">
+
+            {/* ── Left: copy ── */}
+            <div className="mde-copy">
+
+                {/* Eyebrow — word-by-word reveal */}
+                <motion.div
+                    className="mde-eyebrow-wrap"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.05, duration: 0.4 }}
+                >
+                    <TextReveal
+                        text="Mechanical Design Engineer · Innovation · Manufacturing Excellence"
+                        mode="words"
+                        delay={0.1}
+                        duration={0.4}
+                        stagger={0.04}
+                        className="mde-eyebrow-text"
+                    />
+                </motion.div>
+
+                {/* Headline line 1 — char reveal */}
+                <h1 className="mde-headline">
+                    <TextReveal
+                        text="From concept sketch"
+                        mode="chars"
+                        delay={0.3}
+                        duration={0.38}
+                        stagger={0.03}
+                        className="mde-headline-line1"
+                    />
+                    {/* Line 2 */}
+                    <span className="mde-headline-line2">
+                        <TextReveal
+                            text="to"
+                            mode="chars"
+                            delay={0.75}
+                            duration={0.35}
+                            stagger={0.05}
+                            className="mde-headline-to"
+                        />
+                        <TextReveal
+                            text="certified part."
+                            mode="chars"
+                            delay={0.88}
+                            duration={0.38}
+                            stagger={0.03}
+                            className="mde-headline-part"
+                        />
+                    </span>
+                </h1>
+
+                {/* Subhead — slide in */}
+                <TextReveal
+                    text="Mechanical design built on first principles, refined through rapid iteration, and held to tolerances you can actually measure — not just promise."
+                    mode="slide"
+                    delay={1.2}
+                    duration={0.6}
+                    className="mde-subhead"
+                />
+
+                {/* CTA Buttons */}
+                <motion.div
+                    className="mde-actions"
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.55, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                >
+                    <a className="mde-btn-primary" href="#journey">View Engineering Work →</a>
+                    <a className="mde-btn-secondary" href="#contact">Get in touch</a>
+                </motion.div>
+
+                {/* Process strip — word reveal */}
+                <TextReveal
+                    text="SKETCH → CAD MODEL → CNC MACHINING → INSPECTION"
+                    mode="words"
+                    delay={1.8}
+                    duration={0.35}
+                    stagger={0.05}
+                    className="mde-process-strip"
+                />
+            </div>
+
+            {/* ── Right: illustration ── */}
+            <motion.div
+                className="mde-art"
+                initial={{ opacity: 0, x: 40, scale: 0.96 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                transition={{ delay: 0.3, duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            >
+                <EngineeringSketch />
+            </motion.div>
+        </div>
+
+
+    </section>
+);
 
 export default HeroSection;

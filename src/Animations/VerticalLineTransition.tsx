@@ -61,7 +61,10 @@ export default function VerticalLineTransition() {
         <div
             style={{
                 position: "fixed",
-                inset: 0,
+                top: 0,
+                left: 0,
+                width: "100vw",
+                height: "100vh",
                 zIndex: 9999,
                 display: "flex",
                 flexDirection: "row",

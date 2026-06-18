@@ -11,6 +11,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
+  const isHomePage = location.pathname.toLowerCase() === '/home' || location.pathname === '/';
   const isLandingPage = location.pathname === '/';
 
   if (isLandingPage) {
@@ -25,7 +26,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           component="main"
           sx={{
             flexGrow: 1,
-            py: { xs: 3, sm: 4, md: 6 },
+            py: isHomePage ? 0 : { xs: 3, sm: 4, md: 6 },
             px: { xs: 2, sm: 3, md: 0 },
           }}
         >

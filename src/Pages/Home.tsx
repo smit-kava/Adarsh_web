@@ -1,12 +1,21 @@
+import { Box } from "@mui/material";
 import HeroSection from "./Herosection ";
 
-/**
- * Home
- * ----
- * The primary portfolio page.
- * Rendered after the LoadingPage animation completes (handled in App.tsx).
- * The AuroraBackground is applied globally via Layout.tsx.
- */
-const Home = () => <HeroSection />;
 
+// const Home = () => 
+
+
+// <HeroSection />;
+
+
+
+
+
+const Home = () => {
+    return (
+        <Box>
+            <HeroSection />
+        </Box>
+    )
+}
 export default Home;
