@@ -109,3 +109,29 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 } */
+
+/* ── Global Theme Scrollbar ────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F7F9FB; /* Matches palette.background.default */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C6C6CD; /* Matches palette.divider */
+  border-radius: 10px;
+  border: 2px solid #F7F9FB;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0051D5; /* Matches palette.primary.main */
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #C6C6CD #F7F9FB;
+}

@@ -54,8 +54,72 @@ export function MenuIcon({ IconColor, ...other }: Props) {
   )
 }
 
+
+
+export function mathsIcons({ IconColor, ...other }: Props) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...other}>
+      <path d="M0 0h24v24H0z" fill="none" />
+      <path fill="currentColor" d="M20 19.88V22l-1.8-1.17l-4.79-9c.66-.21 1.26-.55 1.78-1zM15 7a3 3 0 0 1-3 3h-.44L5.8 20.83L4 22v-2.12L9.79 9c-1.1-1.23-1-3.13.24-4.24C10.57 4.28 11.27 4 12 4V2a1 1 0 0 1 1 1v1.18c1.2.42 2 1.55 2 2.82m-2 0a1 1 0 0 0-1-1a1 1 0 0 0-1 1a1 1 0 0 0 1 1a1 1 0 0 0 1-1" />
+    </svg>
+  )
+}
+
+
+
+export function RoboticsICons({ IconColor, ...other }: Props) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} {...other} viewBox="0 0 24 24">
+      <path d="M0 0h24v24H0z" fill="none" />
+      <path fill="Blue" d="M4 21v-5q0-.825.588-1.412T6 14h12q.825 0 1.413.588T20 16v5zm5-8q-2.075 0-3.537-1.463T4 8t1.463-3.537T9 3h6q2.075 0 3.538 1.463T20 8t-1.463 3.538T15 13zm-3 6h12v-3H6zm3-8h6q1.25 0 2.125-.875T18 8t-.875-2.125T15 5H9q-1.25 0-2.125.875T6 8t.875 2.125T9 11m.713-2.287Q10 8.425 10 8t-.288-.712T9 7t-.712.288T8 8t.288.713T9 9t.713-.288m6 0Q16 8.426 16 8t-.288-.712T15 7t-.712.288T14 8t.288.713T15 9t.713-.288M12 8" />
+    </svg>
+  )
+
+}
+export function FeaIcon({ IconColor, ...other }: Props) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...other}>
+      <path d="M3 18l6-6 4 4 8-8" />
+      <circle cx="3" cy="18" r="2" fill="currentColor" />
+      <circle cx="9" cy="12" r="2" fill="currentColor" />
+      <circle cx="13" cy="16" r="2" fill="currentColor" />
+      <circle cx="21" cy="8" r="2" fill="currentColor" />
+    </svg>
+  );
+}
+
+export function ThermalIcon({ IconColor, ...other }: Props) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...other}>
+      <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z" />
+      <path d="M11.5 5.5v7" strokeWidth="2.5" />
+      <path d="M17 6h3" strokeWidth="1.5" />
+      <path d="M17 10h4" strokeWidth="1.5" />
+      <path d="M17 14h3" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+export function AutomationIcon({ IconColor, ...other }: Props) {
+  return (
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...other}>
+      <path d="M0 0h24v24H0z" fill="none" />
+      <path fill="currentColor" d="M14.07 15.23q.18-.585.18-1.23t-.18-1.23l1.49-1.13l-.73-1.27l-1.73.73c-.56-.6-1.3-1.04-2.13-1.23L10.73 8H9.27l-.24 1.86c-.83.19-1.57.63-2.13 1.23l-1.73-.73l-.73 1.27l1.49 1.13q-.18.585-.18 1.23t.18 1.23l-1.49 1.13l.73 1.27l1.73-.73c.56.6 1.3 1.04 2.13 1.23L9.27 20h1.47l.23-1.86c.83-.19 1.57-.63 2.13-1.23l1.73.73l.73-1.27zM10 17c-1.66 0-3-1.34-3-3s1.34-3 3-3s3 1.34 3 3s-1.34 3-3 3" opacity=".3" />
+      <path fill="currentColor" d="M10 13c.55 0 1 .45 1 1s-.45 1-1 1s-1-.45-1-1s.45-1 1-1m0-2c-1.66 0-3 1.34-3 3s1.34 3 3 3s3-1.34 3-3s-1.34-3-3-3m8.5-2l1.09-2.41L22 5.5l-2.41-1.09L18.5 2l-1.09 2.41L15 5.5l2.41 1.09zm2.78 3.72L20.5 11l-.78 1.72l-1.72.78l1.72.78l.78 1.72l.78-1.72L23 13.5zM16.25 14c0-.12 0-.25-.01-.37l1.94-1.47l-2.5-4.33l-2.24.94c-.2-.13-.42-.26-.64-.37L12.5 6h-5l-.3 2.41c-.22.11-.43.24-.64.37l-2.24-.95l-2.5 4.33l1.94 1.47c-.01.12-.01.25-.01.37s0 .25.01.37l-1.94 1.47l2.5 4.33l2.24-.94c.2.13.42.26.64.37l.3 2.4h5l.3-2.41c.22-.11.43-.23.64-.37l2.24.94l2.5-4.33l-1.94-1.47c.01-.11.01-.24.01-.36m-1.42 3.64l-1.73-.73c-.56.6-1.3 1.04-2.13 1.23L10.73 20H9.27l-.23-1.86c-.83-.19-1.57-.63-2.13-1.23l-1.73.73l-.73-1.27l1.49-1.13q-.18-.585-.18-1.23t.18-1.23l-1.49-1.13l.73-1.27l1.73.73c.56-.6 1.3-1.04 2.13-1.23L9.27 8h1.47l.23 1.86c.83.19 1.57.63 2.13 1.23l1.73-.73l.73 1.27l-1.49 1.13q.18.585.18 1.23t-.18 1.23l1.49 1.13z" />
+    </svg>
+
+
+  );
+}
+
 export const Icons = {
   LinkedIn: LinkedInIcon,
   Mail: EmailIcon,
   Menu: MenuIcon,
+  RoboticsICons: RoboticsICons,
+  Fea: FeaIcon,
+  Thermal: ThermalIcon,
+  Automation: AutomationIcon,
 };
+

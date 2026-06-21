@@ -105,7 +105,10 @@ const AuroraBackground: React.FC<AuroraBackgroundProps> = ({
           width: 100%;
           min-height: 100vh;
           background: #ffffff;
-          overflow: hidden;
+          /* NOTE: overflow must NOT be hidden here — it breaks position:sticky
+             on the navbar and prevents the page from scrolling. The blobs
+             are clipped by .aurora-blobs which has its own overflow:hidden. */
+          overflow-x: clip;
         }
         .aurora-blobs {
           position: absolute;

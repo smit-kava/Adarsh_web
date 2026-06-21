@@ -11,6 +11,7 @@ import {
     ListItemText,
     Toolbar,
     Typography,
+    useScrollTrigger,
     useTheme,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -32,6 +33,7 @@ const Header = () => {
     const theme = useTheme();
     const location = useLocation();
     const [drawerOpen, setDrawerOpen] = useState(false);
+    const scrolled = useScrollTrigger({ disableHysteresis: true, threshold: 10 });
 
     const isActive = (path: string) => {
         if (path === Routes.Home) {
@@ -67,9 +69,13 @@ const Header = () => {
                 elevation={0}
                 sx={{
                     backdropFilter: 'blur(12px)',
-                    bgcolor: 'rgba(255,255,255,0.85)',
+                    bgcolor: scrolled ? 'rgba(255,255,255,0.97)' : 'rgba(255,255,255,0.85)',
                     borderBottom: '1px solid',
                     borderColor: 'divider',
+                    boxShadow: scrolled
+                        ? '0 2px 16px 0 rgba(15,23,42,0.08)'
+                        : 'none',
+                    transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
                 }}
             >
                 <Container maxWidth="xl">
