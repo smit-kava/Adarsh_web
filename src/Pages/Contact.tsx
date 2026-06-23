@@ -1,19 +1,17 @@
-import React, { useState } from "react";
-import {
-    Box,
-    Typography,
-    TextField,
-    Button,
-    Alert,
-    IconButton,
-} from "@mui/material";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import SendIcon from "@mui/icons-material/Send";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import SendIcon from "@mui/icons-material/Send";
+import {
+    Alert,
+    Box,
+    Button,
+    TextField,
+    Typography
+} from "@mui/material";
 import { motion } from "framer-motion";
-import { Icons } from "../assets/Icons/Icons";
+import React, { useState } from "react";
 import BlueprintMap from "../components/BlueprintMap";
 import TextReveal from "../components/Textreveal";
 
@@ -151,7 +149,7 @@ const Contact: React.FC = () => {
                             </Box>
                             <Box sx={{ display: "flex", alignItems: "center", gap: 0.8, color: "rgba(255,255,255,0.7)" }}>
                                 <EmailOutlinedIcon sx={{ fontSize: "1rem" }} />
-                                <Typography sx={{ fontSize: "0.75rem", fontFamily: "'Inter', sans-serif" }}>adarsh@example.com</Typography>
+                                <Typography sx={{ fontSize: "0.75rem", fontFamily: "'Inter', sans-serif" }}>Adarshkava@gmail.com</Typography>
                             </Box>
                         </Box>
                     </Box>

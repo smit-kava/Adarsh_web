@@ -10,7 +10,7 @@
 
 /* ── Hero wrapper ──────────────────────────────────────────── */
 .mde-hero {
-  min-height: calc(100dvh - var(--mde-header-h));
+  min-height: calc(84dvh - var(--mde-header-h));
   display: flex;
   align-items: center;
   /* vertical rhythm — no extra dead space */

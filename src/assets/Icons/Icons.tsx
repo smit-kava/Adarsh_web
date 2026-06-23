@@ -69,9 +69,9 @@ export function mathsIcons({ IconColor, ...other }: Props) {
 
 export function RoboticsICons({ IconColor, ...other }: Props) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} {...other} viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" width={35} height={35} {...other} viewBox="0 0 24 24">
       <path d="M0 0h24v24H0z" fill="none" />
-      <path fill="Blue" d="M4 21v-5q0-.825.588-1.412T6 14h12q.825 0 1.413.588T20 16v5zm5-8q-2.075 0-3.537-1.463T4 8t1.463-3.537T9 3h6q2.075 0 3.538 1.463T20 8t-1.463 3.538T15 13zm-3 6h12v-3H6zm3-8h6q1.25 0 2.125-.875T18 8t-.875-2.125T15 5H9q-1.25 0-2.125.875T6 8t.875 2.125T9 11m.713-2.287Q10 8.425 10 8t-.288-.712T9 7t-.712.288T8 8t.288.713T9 9t.713-.288m6 0Q16 8.426 16 8t-.288-.712T15 7t-.712.288T14 8t.288.713T15 9t.713-.288M12 8" />
+      <path fill="currentColor" d="M4 21v-5q0-.825.588-1.412T6 14h12q.825 0 1.413.588T20 16v5zm5-8q-2.075 0-3.537-1.463T4 8t1.463-3.537T9 3h6q2.075 0 3.538 1.463T20 8t-1.463 3.538T15 13zm-3 6h12v-3H6zm3-8h6q1.25 0 2.125-.875T18 8t-.875-2.125T15 5H9q-1.25 0-2.125.875T6 8t.875 2.125T9 11m.713-2.287Q10 8.425 10 8t-.288-.712T9 7t-.712.288T8 8t.288.713T9 9t.713-.288m6 0Q16 8.426 16 8t-.288-.712T15 7t-.712.288T14 8t.288.713T15 9t.713-.288M12 8" />
     </svg>
   )
 
@@ -79,12 +79,10 @@ export function RoboticsICons({ IconColor, ...other }: Props) {
 export function FeaIcon({ IconColor, ...other }: Props) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...other}>
-      <path d="M3 18l6-6 4 4 8-8" />
-      <circle cx="3" cy="18" r="2" fill="currentColor" />
-      <circle cx="9" cy="12" r="2" fill="currentColor" />
-      <circle cx="13" cy="16" r="2" fill="currentColor" />
-      <circle cx="21" cy="8" r="2" fill="currentColor" />
+
+      <path fill="currentColor" d="M21 8c-1.5 0-2.3 1.4-1.9 2.5l-3.6 3.6c-.3-.1-.7-.1-1 0l-2.6-2.6c.4-1.1-.4-2.5-1.9-2.5c-1.4 0-2.3 1.4-1.9 2.5L3.5 16c-1.1-.3-2.5.5-2.5 2c0 1.1.9 2 2 2c1.4 0 2.3-1.4 1.9-2.5l4.5-4.6c.3.1.7.1 1 0l2.6 2.6c-.3 1 .5 2.5 2 2.5s2.3-1.4 1.9-2.5l3.6-3.6c1.1.3 2.5-.5 2.5-1.9c0-1.1-.9-2-2-2m-6 1l.9-2.1L18 6l-2.1-.9L15 3l-.9 2.1L12 6l2.1.9zM3.5 11L4 9l2-.5L4 8l-.5-2L3 8l-2 .5L3 9z" />
     </svg>
+
   );
 }
 
